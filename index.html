@@ -309,7 +309,7 @@ summary { cursor: pointer; color: var(--link); font-size: 14px; font-weight: 500
     <li class="node"><span class="tag sv">SystemVerilog</span><b>Ship it</b><span>VBlue prints plain SystemVerilog: one assignment per value and one clocked block. No scheduling logic is added.</span></li>
   </ol>
   <p class="chain"><span>XBlue rules</span><i>≡</i><span>VBlue, lowered</span><i>≡</i><span>VBlue, optimized</span><i class="to">→</i><span>SystemVerilog</span></p>
-  <p class="note">Where the ≡ stands today. Proved in Lean: XBlue ≡ VBlue, i.e. every supported rule design is equivalent to the VBlue module it lowers to (<code>lower_correct</code>), and flattening a VBlue hierarchy keeps its meaning (<code>flatten_sound</code>). In progress: the equivalence of hand-optimized VBlue modules with the lowered ones (in the case study they are checked cycle by cycle in co-simulation), and the subexpression sharing done when printing SystemVerilog (checked the same way).</p>
+  <p class="note">Where the ≡ stands today. Proved in Lean: XBlue ≡ VBlue, i.e. every supported rule design is equivalent to the VBlue module it lowers to (<code>lower_correct</code>), and flattening a VBlue hierarchy keeps its meaning (<code>flatten_sound</code>). Checked on every emitted design: the subexpression sharing done when printing SystemVerilog, by a checker proved sound in Lean (<code>hoistCheck_sound</code>), so each emitted core is proved equivalent to its rule design. In progress: the equivalence of hand-optimized VBlue modules with the lowered ones (in the case study they are checked cycle by cycle in co-simulation).</p>
 </div></section>
 
 <section class="band"><div class="in case">
