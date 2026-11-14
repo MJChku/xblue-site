@@ -165,7 +165,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .steps button[aria-current="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 .steps button[aria-current="true"] .num { background: var(--accent); color: #fff; }
 .pg { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 36px; max-width: 1400px; margin: 0 auto; padding: 28px max(20px, env(safe-area-inset-right, 0px)) 64px max(20px, env(safe-area-inset-left, 0px)); }
-@media (max-width: 980px) { .pg { grid-template-columns: 1fr; } }
+@media (max-width: 980px) { .pg { grid-template-columns: minmax(0, 1fr); } }
 .lesson h1 { font-size: 28px; margin: 0 0 6px; line-height: 1.2; }
 .lesson .sum { color: var(--muted); margin: 0 0 16px; font-size: 17px; }
 .lesson p { margin: 0 0 12px; }
@@ -179,6 +179,52 @@ tbody tr:last-child td { border-bottom: 0; }
 .src .ln.del { background: var(--del-wash); }
 .src .ln.add code, .src .ln.del code { padding-left: 4px; }
 .k { color: var(--kw); } .n { color: var(--num); } .c { color: var(--com); font-style: italic; } .s { color: var(--str); }
+details.proof { margin: 4px 0 8px; }
+details.proof > summary { font-size: 14px; }
+details.proof .src { margin-top: 8px; }
+/* proof viewer: tactic steps in the proof text, goals beside (wide) or below (narrow) */
+.pv { container-type: inline-size; margin-top: 8px; }
+.pvbody { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@container (min-width: 760px) {
+  .pvbody { grid-template-columns: minmax(0, 1fr) minmax(300px, 38%); align-items: start; }
+  .pvgoals { position: sticky; top: 76px; max-height: calc(100vh - 92px); }
+}
+.pv .pvcode { margin: 0; max-height: none; }
+.pvcode .st { border-radius: 3px; cursor: pointer; }
+.pvcode .st:hover, .pvcode .st.hov { background: rgba(31, 127, 208, .10); }
+.pvcode .st.sel { background: rgba(31, 127, 208, .20); box-shadow: 0 0 0 1px rgba(31, 127, 208, .45); }
+.pvcode .st.sel .st { background: none; box-shadow: none; }
+.pvcode .st.err { text-decoration: underline wavy var(--fail); text-underline-offset: 3px; }
+.pvgoals { position: sticky; bottom: 0; z-index: 2; max-height: 48vh; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.pvbar { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; background: var(--soft); border-bottom: 1px solid var(--line); font-size: 13px; }
+.pvbar > button { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 1px 10px; font-size: 14px; }
+.pvbar > button:hover { border-color: var(--accent); }
+.pvbar .pc { color: var(--muted); font-size: 12px; }
+.pvbar .sp { flex: 1; }
+.pvbar .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.pvbar .seg button { background: var(--bg); border: 0; padding: 1px 9px; font-size: 13px; color: var(--muted); }
+.pvbar .seg button + button { border-left: 1px solid var(--line); }
+.pvbar .seg button[aria-pressed="true"] { background: var(--wash); color: var(--ink); }
+.pvbar .pi { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); white-space: nowrap; }
+.pvpanel { padding: 10px 12px 12px; }
+.pvpanel .gt { font-size: 13px; margin: 0 0 8px; }
+.pvpanel .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+.pvpanel .msg { font-size: 13px; padding: 6px 10px; white-space: pre-wrap; font-family: var(--mono); }
+.goal { font-family: var(--mono); font-size: 12.5px; line-height: 1.5; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); margin: 0 0 8px; overflow-x: auto; }
+.goal .gh { margin: 0; padding: 3px 10px; font: 500 12px var(--ui); color: var(--muted); background: var(--soft); border-bottom: 1px solid var(--line); }
+.goal .gcase { font-family: var(--mono); color: var(--deep); margin-left: 6px; }
+.goal .hyps { padding: 6px 10px; border-bottom: 1px solid var(--ink); margin: 0 0 0; }
+.goal .hyps > div { white-space: pre; }
+.goal .hyps > div.new { background: var(--add-wash); box-shadow: inset 2px 0 0 var(--add); padding-left: 4px; margin-left: -6px; }
+.goal .hyps .cut { color: var(--muted); font-style: italic; font-family: var(--ui); font-size: 12px; }
+.goal .tgt { padding: 6px 10px; white-space: pre; }
+.goal .turn { color: var(--accent); font-weight: 500; }
+.nogoals { font-size: 13px; color: var(--green); margin: 0 0 8px; }
+.pvcode .igs { padding: 4px 14px 8px 3.2em; background: var(--bg); border-block: 1px solid var(--line); }
+.pvcode .ig { margin: 6px 0 0 14px; }
+.pvcode .ig > .gh { margin: 0 0 4px; font-size: 12px; color: var(--muted); }
+.pvcode .ig .goal { display: inline-block; min-width: min(420px, 100%); max-width: 100%; vertical-align: top; }
+.pvcode .ig .nogoals { font-family: var(--ui); }
 .try { margin-top: 28px; padding: 20px 22px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); }
 .try h2 { font-size: 19px; margin: 0 0 10px; }
 .try ol { padding-left: 20px; margin: 0; }
@@ -265,6 +311,12 @@ summary { cursor: pointer; color: var(--link); font-size: 14px; font-weight: 500
   .pipe .link.eq i { transform: none; font-size: 34px; }
 }
 
+/* the docked goal panel overlays the top of the right-hand pane (no layout
+   shift) and only while the proof is on screen */
+#goaldock { position: sticky; top: 76px; z-index: 3; height: 0; overflow: visible; }
+#goaldock .pvgoals { position: static; max-height: calc(100vh - 96px); }
+@media (max-width: 680px) { .steps button { white-space: normal; text-align: left; } .pagehead h1 { font-size: 28px; } }
+
 </style>
 </head>
 <body>
@@ -277,6 +329,7 @@ summary { cursor: pointer; color: var(--link); font-size: 14px; font-weight: 500
 <main class="pg">
   <section class="lesson" id="lesson"><p class="empty">Loading.</p></section>
   <section class="pane">
+    <div id="goaldock" hidden></div>
     <div id="viewing"></div>
     <div class="tabs" role="tablist" id="tabs"></div>
     <div id="pane"></div>
@@ -310,13 +363,201 @@ function hl(line, lang) {
   if (ci >= 0) out += '<span class="c">' + esc(line.slice(ci)) + '</span>';
   return out;
 }
-function codeLines(text, lang, cls, marks) {
-  var d = el('div', cls); d.tabIndex = 0;
+function codeLines(text, lang, cls, marks, first) {
+  var d = el('div', cls); d.tabIndex = 0; first = first || 1;
   d.innerHTML = text.replace(/\n$/, '').split('\n').map(function (l, k) {
-    var m = marks && marks[k + 1] ? ' ' + marks[k + 1] : '';
-    return '<div class="ln' + m + '" data-l="' + (k + 1) + '"><i>' + (k + 1) + '</i><code>' + (hl(l, lang) || ' ') + '</code></div>';
+    var n = k + first, m = marks && marks[n] ? ' ' + marks[n] : '';
+    return '<div class="ln' + m + '" data-l="' + n + '"><i>' + n + '</i><code>' + (hl(l, lang) || ' ') + '</code></div>';
   }).join('');
   return d;
+}
+/* A lesson source is the design, then (optionally) a proof section that
+   starts at the marker line; the page folds the proof away. */
+var MARK = /^-- -+ reasoning\s*$/;
+function splitSrc(text) {
+  var ls = text.replace(/\n$/, '').split('\n'), i = ls.findIndex(function (l) { return MARK.test(l); });
+  if (i < 0) return { design: text, proof: null, at: 0 };
+  while (i > 0 && !ls[i - 1].trim()) i--;
+  var j = i + 1; while (j < ls.length && !ls[j].trim()) j++;
+  return { design: ls.slice(0, i).join('\n'), proof: ls.slice(j).join('\n'), at: j + 1 };
+}
+
+/* ---- proof viewer (Alectryon-style) ----
+   proof.steps (tools/site/ProofStates.lean): one per tactic step, in source
+   order, outer before inner, with the goals before and after it. The proof
+   text is drawn with each step as a span; selecting one shows its goals. */
+var LKW = /^(theorem|lemma|def|abbrev|structure|inductive|instance|example|by|have|show|from|fun|let|in|match|with|at|open|namespace|section|variable|where|if|then|else|do|calc|private|noncomputable|deriving|Prop|Type|True|False|intro|intros|simp|simp_all|rw|rwa|exact|apply|refine|decide|cases|rcases|obtain|induction|constructor|omega|unfold|revert|subst|rfl|all_goals|any_goals|first|repeat|try|funext|contradiction|exfalso|bv_decide|native_decide|norm_num|specialize|generalize|assumption|nofun|grind)$/;
+/* Character classes for Lean text: k keyword, n number, c comment, s string. */
+function leanClasses(lines) {
+  var inBlock = 0;
+  return lines.map(function (l) {
+    var ch = Array.from(l), cls = new Array(ch.length).fill(''), i = 0;
+    while (i < ch.length) {
+      if (inBlock) {
+        if (ch[i] === '-' && ch[i + 1] === '/') { cls[i] = cls[i + 1] = 'c'; i += 2; inBlock--; continue; }
+        if (ch[i] === '/' && ch[i + 1] === '-') { cls[i] = cls[i + 1] = 'c'; i += 2; inBlock++; continue; }
+        cls[i++] = 'c'; continue;
+      }
+      if (ch[i] === '-' && ch[i + 1] === '-') { for (; i < ch.length; i++) cls[i] = 'c'; break; }
+      if (ch[i] === '/' && ch[i + 1] === '-') { inBlock = 1; cls[i] = cls[i + 1] = 'c'; i += 2; continue; }
+      if (ch[i] === '"') { var j = i + 1; while (j < ch.length && ch[j] !== '"') j++; for (; i <= j && i < ch.length; i++) cls[i] = 's'; continue; }
+      if (/[A-Za-z_]/.test(ch[i])) {
+        var j = i; while (j < ch.length && /[\w'.!?]/.test(ch[j])) j++;
+        if (LKW.test(ch.slice(i, j).join(''))) for (var q = i; q < j; q++) cls[q] = 'k';
+        i = j; continue;
+      }
+      if (/\d/.test(ch[i]) && (i === 0 || !/[\w#]/.test(ch[i - 1]))) {
+        var j = i; while (j < ch.length && /[\w#]/.test(ch[j])) j++;
+        for (; i < j; i++) cls[i] = 'n'; continue;
+      }
+      i++;
+    }
+    return { ch: ch, cls: cls };
+  });
+}
+function goalHtml(g, k, n, prev) {
+  var old = {};
+  (prev || []).forEach(function (h) { old[h] = 1; });
+  var h = '<div class="goal">';
+  if (n > 1 || g.case) h += '<p class="gh">' + (n > 1 ? 'Goal ' + (k + 1) + ' of ' + n : 'Goal') + (g.case ? ' <span class="gcase">case ' + esc(g.case) + '</span>' : '') + '</p>';
+  if (g.hyps.length || g.cut) {
+    h += '<div class="hyps">' + g.hyps.map(function (x) { return '<div' + (prev && !old[x] ? ' class="new"' : '') + '>' + esc(x) + '</div>'; }).join('');
+    if (g.cut) h += '<div class="cut">… ' + g.cut + ' more line' + (g.cut > 1 ? 's' : '') + ' not shown</div>';
+    h += '</div>';
+  }
+  return h + '<div class="tgt"><span class="turn">⊢</span> ' + esc(g.type) + '</div></div>';
+}
+function goalsHtml(gs, prev) {
+  if (!gs.length) return '<p class="nogoals">No goals: this part of the proof is done.</p>';
+  var ph = prev && prev.length ? prev[0].hyps : null;
+  return gs.map(function (g, k) { return goalHtml(g, k, gs.length, ph); }).join('');
+}
+function firstLine(t) { var l = t.split('\n')[0]; return l.length > 48 ? l.slice(0, 46) + '…' : l + (t.indexOf('\n') >= 0 ? ' …' : ''); }
+
+function proofView(text, at, marks, proof) {
+  var steps = proof.steps, raw = text.replace(/\n$/, '').split('\n'), last = at + raw.length - 1;
+  steps = steps.filter(function (s) { return s.line >= at && s.endLine <= last; });
+  var toks = leanClasses(raw), sel = null, hov = null, before = false, inline = false;
+  var root = el('div', 'pv'), body = el('div', 'pvbody'), code = el('div', 'src pvcode'), side = el('div', 'pvgoals');
+  code.tabIndex = 0;
+  /* per line: the steps that cover part of it, as [from, to) code-point columns */
+  function ranges(n) {
+    var out = [];
+    steps.forEach(function (s, i) {
+      if (n < s.line || n > s.endLine) return;
+      var ch = toks[n - at].ch, ind = 0; while (ind < ch.length && ch[ind] === ' ') ind++;
+      var a = n === s.line ? s.col : ind, b = n === s.endLine ? s.endCol : ch.length;
+      if (b > a) out.push({ i: i, a: a, b: b });
+    });
+    return out.sort(function (x, y) { return x.a - y.a || y.b - x.b; });
+  }
+  function lineHtml(n) {
+    var t = toks[n - at], rs = ranges(n), out = '', stack = [], r = 0, p = 0, N = t.ch.length;
+    while (p <= N) {
+      while (stack.length && stack[stack.length - 1].b <= p) { out += '</span>'; stack.pop(); }
+      while (r < rs.length && rs[r].a === p) {
+        var s = steps[rs[r].i];
+        var top = stack[stack.length - 1], x = { b: top ? Math.min(top.b, rs[r].b) : rs[r].b };
+        out += '<span class="st' + (s.errors.length ? ' err' : '') + '" data-s="' + rs[r].i + '">'; stack.push(x); r++;
+      }
+      if (p === N) break;
+      var stop = N;
+      if (r < rs.length) stop = Math.min(stop, rs[r].a);
+      if (stack.length) stop = Math.min(stop, stack[stack.length - 1].b);
+      var q = p;
+      while (q < stop) {
+        var c = t.cls[q], e = q; while (e < stop && t.cls[e] === c) e++;
+        var seg = esc(t.ch.slice(q, e).join(''));
+        out += c ? '<span class="' + c + '">' + seg + '</span>' : seg; q = e;
+      }
+      p = stop;
+    }
+    while (stack.length) { out += '</span>'; stack.pop(); }
+    return out || ' ';
+  }
+  function inlineGoals(n) {
+    var h = '';
+    steps.forEach(function (s, i) {
+      if (s.endLine !== n) return;
+      h += '<div class="ig" data-s="' + i + '"><p class="gh"><code>' + esc(firstLine(s.text)) + '</code></p>' + goalsHtml(s.after, s.before) + '</div>';
+    });
+    return h ? '<div class="igs">' + h + '</div>' : '';
+  }
+  function drawCode() {
+    var h = '';
+    for (var n = at; n <= last; n++) {
+      var m = marks && marks[n] ? ' ' + marks[n] : '';
+      h += '<div class="ln' + m + '" data-l="' + n + '"><i>' + n + '</i><code>' + lineHtml(n) + '</code></div>';
+      if (inline) h += inlineGoals(n);
+    }
+    code.innerHTML = h; mark();
+  }
+  function mark() {
+    Array.prototype.forEach.call(code.querySelectorAll('.st'), function (e) {
+      var i = +e.getAttribute('data-s');
+      e.classList.toggle('sel', i === sel); e.classList.toggle('hov', i === hov && i !== sel);
+    });
+  }
+  var bar = el('div', 'pvbar');
+  bar.innerHTML = '<button type="button" class="pp" aria-label="Previous step">←</button><button type="button" class="pn" aria-label="Next step">→</button>' +
+    '<span class="pc mono"></span><span class="sp"></span>' +
+    '<span class="seg" role="group" aria-label="Goals shown"><button type="button" data-b="1">Before</button><button type="button" data-b="0">After</button></span>' +
+    '<label class="pi"><input type="checkbox"> all goals inline</label>';
+  var panel = el('div', 'pvpanel');
+  side.appendChild(bar); side.appendChild(panel);
+  function draw() {
+    var i = hov != null ? hov : sel;
+    bar.querySelector('.pc').textContent = sel == null ? steps.length + ' steps' : 'step ' + (sel + 1) + ' / ' + steps.length;
+    Array.prototype.forEach.call(bar.querySelectorAll('.seg button'), function (b) { b.setAttribute('aria-pressed', String((b.getAttribute('data-b') === '1') === before)); });
+    var h;
+    if (i == null) {
+      var s0 = steps[0];
+      h = '<p class="gt">Theorem <code>' + esc(s0.decl) + '</code>: the goal to prove</p>' + goalsHtml(s0.before) +
+          '<p class="hint">Click or hover a tactic to see the goals after it; ← → step through.</p>';
+    } else {
+      var s = steps[i];
+      h = '<p class="gt">' + (before ? 'Before' : 'After') + ' <code>' + esc(firstLine(s.text)) + '</code> <span class="muted">line ' + s.line + (s.decl ? ', in ' + esc(s.decl) : '') + '</span></p>';
+      h += s.errors.map(function (e) { return '<div class="msg"><b>error</b>: ' + esc(e) + '</div>'; }).join('');
+      h += before ? goalsHtml(s.before) : goalsHtml(s.after, s.before);
+    }
+    panel.innerHTML = h; mark();
+  }
+  function select(i, scroll) {
+    sel = i; hov = null; draw();
+    if (scroll && i != null) {
+      var e = code.querySelector('.st[data-s="' + i + '"]');
+      /* scroll the page only (not the code box sideways, which hides the line numbers) */
+      if (e) { var r = e.getBoundingClientRect(); if (r.top < 90 || r.bottom > innerHeight * 0.5) window.scrollBy(0, r.top - innerHeight / 4); }
+    }
+  }
+  function stepBy(d) {
+    var i = sel == null ? (d > 0 ? 0 : steps.length - 1) : sel + d;
+    if (i >= 0 && i < steps.length) select(i, true);
+  }
+  code.addEventListener('click', function (e) {
+    var t = e.target.closest('.st'); if (!t) return;
+    var i = +t.getAttribute('data-s'); select(sel === i ? null : i);
+  });
+  code.addEventListener('mouseover', function (e) {
+    var t = e.target.closest('.st'), i = t ? +t.getAttribute('data-s') : null;
+    if (i !== hov) { hov = i; draw(); }
+  });
+  code.addEventListener('mouseleave', function () { if (hov != null) { hov = null; draw(); } });
+  code.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { stepBy(1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { stepBy(-1); e.preventDefault(); }
+    else if (e.key === 'Escape') select(null);
+  });
+  bar.querySelector('.pp').addEventListener('click', function () { stepBy(-1); });
+  bar.querySelector('.pn').addEventListener('click', function () { stepBy(1); });
+  Array.prototype.forEach.call(bar.querySelectorAll('.seg button'), function (b) {
+    b.addEventListener('click', function () { before = b.getAttribute('data-b') === '1'; draw(); });
+  });
+  bar.querySelector('.pi input').addEventListener('change', function (e) { inline = e.target.checked; drawCode(); });
+  body.appendChild(code); body.appendChild(side); root.appendChild(body);
+  drawCode(); draw();
+  root.select = function (i, scroll) { select(i, scroll); };
+  return root;
 }
 
 /* ---- routing: #<lesson>--<tab> ---- */
@@ -380,13 +621,50 @@ function srcMarks() {
   return m;
 }
 
+/* On a two-column layout the goal panel docks at the top of the right-hand
+   pane while the proof is open and on screen, so goals sit beside the proof
+   text; it overlays the pane only while the proof is visible. */
+var WIDE = window.matchMedia ? window.matchMedia('(min-width: 981px)') : { matches: false };
+var DOCKOBS = null, DOCKPLACE = null;
+if (WIDE.addEventListener) WIDE.addEventListener('change', function () { if (DOCKPLACE) DOCKPLACE(); });
+function dockGoals(pd, pv) {
+  var side = pv.querySelector('.pvgoals'), home = side && side.parentNode, dock = $('goaldock'), seen = true;
+  if (!side) return;
+  function place() {
+    if (pd.open && WIDE.matches) { if (side.parentNode !== dock) dock.appendChild(side); dock.hidden = !seen; }
+    else { if (side.parentNode !== home) home.appendChild(side); dock.hidden = true; }
+  }
+  if (DOCKOBS) DOCKOBS.disconnect();
+  if (window.IntersectionObserver) {
+    DOCKOBS = new IntersectionObserver(function (es) { seen = es[es.length - 1].isIntersecting; place(); }, { rootMargin: '-76px 0px 0px 0px' });
+    DOCKOBS.observe(pd);
+  }
+  pd.addEventListener('toggle', place);
+  DOCKPLACE = place;
+  place();
+}
 function renderLesson() {
+  var dk = $('goaldock'); dk.innerHTML = ''; dk.hidden = true; DOCKPLACE = null; if (DOCKOBS) DOCKOBS.disconnect();
   var L = LES, box = $('lesson');
   box.innerHTML = '<h1>' + esc(L.title) + '</h1><p class="sum">' + esc(L.summary) + '</p>' +
     L.text.map(function (t) { return '<p>' + t + '</p>'; }).join('');
   var label = el('p', 'label', VIEW == null ? 'Source' : 'Source: answer to exercise ' + (VIEW + 1));
   box.appendChild(label);
-  var src = codeLines(SRC, 'x', 'src', srcMarks()); src.id = 'srcbox'; box.appendChild(src);
+  var parts = splitSrc(SRC), marks = srcMarks();
+  var src = codeLines(parts.design, 'x', 'src', marks); src.id = 'srcbox'; box.appendChild(src);
+  if (parts.proof) {
+    var pd = el('details', 'proof'), err = Object.keys(marks).some(function (n) { return +n >= parts.at && marks[n] === 'err'; });
+    pd.appendChild(el('summary', '', 'Proof (checked by Lean)'));
+    var PR = (VIEW == null ? ANS : ANS.answers[VIEW]).proof;
+    var pv = PR && PR.steps.some(function (st) { return st.line >= parts.at; }) ? proofView(parts.proof, parts.at, marks, PR) : null;
+    pd.appendChild(pv || codeLines(parts.proof, 'x', 'src', marks, parts.at));
+    /* ?step=N (debug, screenshots): open the proof with step N selected */
+    var qs = /[?&]step=(\d+)/.exec(location.search);
+    if (err || qs || /[?&]proof/.test(location.search)) pd.open = true;
+    if (qs && pv) setTimeout(function () { pv.select(+qs[1] - 1, true); }, 0);
+    box.appendChild(pd);
+    if (pv) dockGoals(pd, pv);
+  }
   if (L.try && L.try.length) {
     var t = el('div', 'try'); t.appendChild(el('h2', '', 'Try this'));
     var ol = el('ol');
@@ -426,7 +704,7 @@ function renderLesson() {
 }
 function refreshSource() {
   var old = $('srcbox'); if (!old) return;
-  var s = codeLines(SRC, 'x', 'src', srcMarks()); s.id = 'srcbox';
+  var s = codeLines(splitSrc(SRC).design, 'x', 'src', srcMarks()); s.id = 'srcbox';
   s.scrollTop = old.scrollTop; old.parentNode.replaceChild(s, old);
   var r = selRule != null && R.compile.ok ? R.compile.rules[selRule] : null;
   if (r && r.line) { var ln = s.querySelector('[data-l="' + r.line + '"]'); if (ln) s.scrollTop = Math.max(0, ln.offsetTop - s.clientHeight / 3); }

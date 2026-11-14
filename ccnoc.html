@@ -165,7 +165,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .steps button[aria-current="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 .steps button[aria-current="true"] .num { background: var(--accent); color: #fff; }
 .pg { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 36px; max-width: 1400px; margin: 0 auto; padding: 28px max(20px, env(safe-area-inset-right, 0px)) 64px max(20px, env(safe-area-inset-left, 0px)); }
-@media (max-width: 980px) { .pg { grid-template-columns: 1fr; } }
+@media (max-width: 980px) { .pg { grid-template-columns: minmax(0, 1fr); } }
 .lesson h1 { font-size: 28px; margin: 0 0 6px; line-height: 1.2; }
 .lesson .sum { color: var(--muted); margin: 0 0 16px; font-size: 17px; }
 .lesson p { margin: 0 0 12px; }
@@ -179,6 +179,52 @@ tbody tr:last-child td { border-bottom: 0; }
 .src .ln.del { background: var(--del-wash); }
 .src .ln.add code, .src .ln.del code { padding-left: 4px; }
 .k { color: var(--kw); } .n { color: var(--num); } .c { color: var(--com); font-style: italic; } .s { color: var(--str); }
+details.proof { margin: 4px 0 8px; }
+details.proof > summary { font-size: 14px; }
+details.proof .src { margin-top: 8px; }
+/* proof viewer: tactic steps in the proof text, goals beside (wide) or below (narrow) */
+.pv { container-type: inline-size; margin-top: 8px; }
+.pvbody { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@container (min-width: 760px) {
+  .pvbody { grid-template-columns: minmax(0, 1fr) minmax(300px, 38%); align-items: start; }
+  .pvgoals { position: sticky; top: 76px; max-height: calc(100vh - 92px); }
+}
+.pv .pvcode { margin: 0; max-height: none; }
+.pvcode .st { border-radius: 3px; cursor: pointer; }
+.pvcode .st:hover, .pvcode .st.hov { background: rgba(31, 127, 208, .10); }
+.pvcode .st.sel { background: rgba(31, 127, 208, .20); box-shadow: 0 0 0 1px rgba(31, 127, 208, .45); }
+.pvcode .st.sel .st { background: none; box-shadow: none; }
+.pvcode .st.err { text-decoration: underline wavy var(--fail); text-underline-offset: 3px; }
+.pvgoals { position: sticky; bottom: 0; z-index: 2; max-height: 48vh; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.pvbar { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; background: var(--soft); border-bottom: 1px solid var(--line); font-size: 13px; }
+.pvbar > button { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 1px 10px; font-size: 14px; }
+.pvbar > button:hover { border-color: var(--accent); }
+.pvbar .pc { color: var(--muted); font-size: 12px; }
+.pvbar .sp { flex: 1; }
+.pvbar .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.pvbar .seg button { background: var(--bg); border: 0; padding: 1px 9px; font-size: 13px; color: var(--muted); }
+.pvbar .seg button + button { border-left: 1px solid var(--line); }
+.pvbar .seg button[aria-pressed="true"] { background: var(--wash); color: var(--ink); }
+.pvbar .pi { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); white-space: nowrap; }
+.pvpanel { padding: 10px 12px 12px; }
+.pvpanel .gt { font-size: 13px; margin: 0 0 8px; }
+.pvpanel .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+.pvpanel .msg { font-size: 13px; padding: 6px 10px; white-space: pre-wrap; font-family: var(--mono); }
+.goal { font-family: var(--mono); font-size: 12.5px; line-height: 1.5; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); margin: 0 0 8px; overflow-x: auto; }
+.goal .gh { margin: 0; padding: 3px 10px; font: 500 12px var(--ui); color: var(--muted); background: var(--soft); border-bottom: 1px solid var(--line); }
+.goal .gcase { font-family: var(--mono); color: var(--deep); margin-left: 6px; }
+.goal .hyps { padding: 6px 10px; border-bottom: 1px solid var(--ink); margin: 0 0 0; }
+.goal .hyps > div { white-space: pre; }
+.goal .hyps > div.new { background: var(--add-wash); box-shadow: inset 2px 0 0 var(--add); padding-left: 4px; margin-left: -6px; }
+.goal .hyps .cut { color: var(--muted); font-style: italic; font-family: var(--ui); font-size: 12px; }
+.goal .tgt { padding: 6px 10px; white-space: pre; }
+.goal .turn { color: var(--accent); font-weight: 500; }
+.nogoals { font-size: 13px; color: var(--green); margin: 0 0 8px; }
+.pvcode .igs { padding: 4px 14px 8px 3.2em; background: var(--bg); border-block: 1px solid var(--line); }
+.pvcode .ig { margin: 6px 0 0 14px; }
+.pvcode .ig > .gh { margin: 0 0 4px; font-size: 12px; color: var(--muted); }
+.pvcode .ig .goal { display: inline-block; min-width: min(420px, 100%); max-width: 100%; vertical-align: top; }
+.pvcode .ig .nogoals { font-family: var(--ui); }
 .try { margin-top: 28px; padding: 20px 22px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); }
 .try h2 { font-size: 19px; margin: 0 0 10px; }
 .try ol { padding-left: 20px; margin: 0; }
@@ -264,6 +310,12 @@ summary { cursor: pointer; color: var(--link); font-size: 14px; font-weight: 500
   .pipe .link i { transform: rotate(90deg); }
   .pipe .link.eq i { transform: none; font-size: 34px; }
 }
+
+/* the docked goal panel overlays the top of the right-hand pane (no layout
+   shift) and only while the proof is on screen */
+#goaldock { position: sticky; top: 76px; z-index: 3; height: 0; overflow: visible; }
+#goaldock .pvgoals { position: static; max-height: calc(100vh - 96px); }
+@media (max-width: 680px) { .steps button { white-space: normal; text-align: left; } .pagehead h1 { font-size: 28px; } }
 
 </style>
 </head>
