@@ -379,6 +379,21 @@ summary { cursor: pointer; color: var(--link); font-size: 14px; font-weight: 500
   </dl>
 </div></section>
 
+<section class="band"><div class="in case">
+  <div>
+    <p class="eyebrow">Proof result</p>
+    <h2>Weak memory consistency of the BOOM core</h2>
+    <p class="lead">We proved in Lean that the BOOM out-of-order RISC-V core, written in XBlue, satisfies RISC-V weak memory ordering (RVWMO), with the cache assumed correct. The same property had been proved for BOOM over an embedding of its SystemVerilog. Both proofs end in the same statement, so their sizes compare directly.</p>
+    <p class="note">Counts cover everything each final theorem depends on, measured with the same counter. The XBlue proof uses only Lean's three standard axioms plus <code>bv_decide</code> certificates. The comparison assumes the same cache properties on both sides; a few data-cache timing facts that the SystemVerilog proof derives from its cache are assumptions in XBlue.</p>
+  </div>
+  <dl class="stats">
+    <div><dt>149k</dt><dd>lines of Lean for the XBlue proof, against 474k for the SystemVerilog-based proof (0.31×)</dd></div>
+    <div><dt>131k</dt><dd>hand-written lines, against about 344k (0.38×)</dd></div>
+    <div><dt>0</dt><dd>uses of <code>native_decide</code>, against 7,262</dd></div>
+    <div><dt>1,446</dt><dd>Lean modules, against 3,343</dd></div>
+  </dl>
+</div></section>
+
 <section class="band"><div class="in start">
   <div>
     <p class="eyebrow">Learn it</p>
